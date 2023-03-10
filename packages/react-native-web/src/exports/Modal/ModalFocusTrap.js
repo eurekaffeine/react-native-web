@@ -14,6 +14,7 @@ import createElement from '../createElement';
 import StyleSheet from '../StyleSheet';
 import UIManager from '../UIManager';
 import canUseDOM from '../../modules/canUseDom';
+import RootContext from '../AppRegistry/RootContext';
 
 /**
  * This Component is used to "wrap" the modal we're opening
@@ -31,7 +32,7 @@ const FocusBracket = () => {
   });
 };
 
-function attemptFocus(element: any) {
+function attemptFocus(element: any, document: Document) {
   if (!canUseDOM) {
     return false;
   }
@@ -45,7 +46,7 @@ function attemptFocus(element: any) {
   return document.activeElement === element;
 }
 
-function focusFirstDescendant(element: any) {
+function focusFirstDescendant(element: any, document: Document) {
   for (let i = 0; i < element.childNodes.length; i++) {
     const child = element.childNodes[i];
     if (attemptFocus(child) || focusFirstDescendant(child)) {
@@ -55,10 +56,10 @@ function focusFirstDescendant(element: any) {
   return false;
 }
 
-function focusLastDescendant(element: any) {
+function focusLastDescendant(element: any, document: Document) {
   for (let i = element.childNodes.length - 1; i >= 0; i--) {
     const child = element.childNodes[i];
-    if (attemptFocus(child) || focusLastDescendant(child)) {
+    if (attemptFocus(child, document) || focusLastDescendant(child, document)) {
       return true;
     }
   }
@@ -75,6 +76,7 @@ const ModalFocusTrap = ({
   children
 }: ModalFocusTrapProps): React.Node => {
   const trapElementRef = React.useRef<?HTMLElement>();
+  const rootContext = React.useContext(RootContext);
   const focusRef = React.useRef<{
     trapFocusInProgress: boolean,
     lastFocusedElement: ?HTMLElement
@@ -85,6 +87,7 @@ const ModalFocusTrap = ({
 
   React.useEffect(() => {
     if (canUseDOM) {
+      const document = rootContext.rootTag?.ownerDocument ?? window.document;
       const trapFocus = () => {
         // We should not trap focus if:
         // - The modal hasn't fully initialized with an HTMLElement ref
@@ -110,11 +113,17 @@ const ModalFocusTrap = ({
             // If the previously selected element is the "first" descendant
             // and we're leaving it - this means that we should be looping
             // around to the other side of the modal.
-            let hasFocused = focusFirstDescendant(trapElementRef.current);
+            let hasFocused = focusFirstDescendant(
+              trapElementRef.current,
+              document
+            );
             if (
               focusRef.current.lastFocusedElement === document.activeElement
             ) {
-              hasFocused = focusLastDescendant(trapElementRef.current);
+              hasFocused = focusLastDescendant(
+                trapElementRef.current,
+                document
+              );
             }
             // If we couldn't focus a new element then we need to focus onto the trap target
             if (
@@ -137,23 +146,27 @@ const ModalFocusTrap = ({
       document.addEventListener('focus', trapFocus, true);
       return () => document.removeEventListener('focus', trapFocus, true);
     }
-  }, [active]);
+  }, [active, rootContext.rootTag]);
 
   // To be fully compliant with WCAG we need to refocus element that triggered opening modal
   // after closing it
-  React.useEffect(function () {
-    if (canUseDOM) {
-      const lastFocusedElementOutsideTrap = document.activeElement;
-      return function () {
-        if (
-          lastFocusedElementOutsideTrap &&
-          document.contains(lastFocusedElementOutsideTrap)
-        ) {
-          UIManager.focus(lastFocusedElementOutsideTrap);
-        }
-      };
-    }
-  }, []);
+  React.useEffect(
+    function () {
+      if (canUseDOM) {
+        const document = rootContext.rootTag?.ownerDocument ?? window.document;
+        const lastFocusedElementOutsideTrap = document.activeElement;
+        return function () {
+          if (
+            lastFocusedElementOutsideTrap &&
+            document.contains(lastFocusedElementOutsideTrap)
+          ) {
+            UIManager.focus(lastFocusedElementOutsideTrap);
+          }
+        };
+      }
+    },
+    [rootContext.rootTag]
+  );
 
   return (
     <>

@@ -13,7 +13,8 @@ import type { ViewProps } from '../../exports/View';
 import UIManager from '../../exports/UIManager';
 import createDOMProps from '../createDOMProps';
 import useStable from '../useStable';
-import { useRef } from 'react';
+import { useContext, useRef } from 'react';
+import RootContext from '../../exports/AppRegistry/RootContext';
 
 let didWarn = false;
 const emptyObject = {};
@@ -71,6 +72,7 @@ export default function usePlatformMethods({
 }): (hostNode: any) => void {
   const previousStyleRef = useRef(null);
   const setNativePropsArgsRef = useRef(null);
+  const rootContext = useContext(RootContext);
   setNativePropsArgsRef.current = { pointerEvents, style };
 
   // Avoid creating a new ref on every render. The props only need to be
@@ -87,6 +89,7 @@ export default function usePlatformMethods({
           setNativePropsArgsRef.current || emptyObject;
         setNativeProps(
           hostNode,
+          rootContext.styleSheet,
           nativeProps,
           pointerEvents,
           style,

@@ -9,7 +9,7 @@ import React from 'react';
 import TextInput from '..';
 import { act } from 'react-dom/test-utils';
 import { createEventTarget } from 'dom-event-testing-library';
-import { render } from '@testing-library/react';
+import renderRootView from '../../../exports/AppRegistry/renderRootView';
 
 function findInput(container) {
   return container.querySelector('input');
@@ -74,19 +74,21 @@ function keydown(payload) {
 describe('components/TextInput', () => {
   describe('prop "autoComplete"', () => {
     test('value "on"', () => {
-      const { container } = render(<TextInput />);
+      const { container } = renderRootView(<TextInput />);
       const input = findInput(container);
       expect(input.getAttribute('autoComplete')).toEqual('on');
     });
 
     test('value "off"', () => {
-      const { container } = render(<TextInput autoComplete="off" />);
+      const { container } = renderRootView(<TextInput autoComplete="off" />);
       const input = findInput(container);
       expect(input.getAttribute('autoComplete')).toEqual('off');
     });
 
     test('autoCompleteType fallback', () => {
-      const { container } = render(<TextInput autoCompleteType="off" />);
+      const { container } = renderRootView(
+        <TextInput autoCompleteType="off" />
+      );
       const input = findInput(container);
       expect(input.getAttribute('autoComplete')).toEqual('off');
     });
@@ -94,13 +96,13 @@ describe('components/TextInput', () => {
 
   describe('prop "autoFocus"', () => {
     test('value "false"', () => {
-      const { container } = render(<TextInput />);
+      const { container } = renderRootView(<TextInput />);
       const input = findInput(container);
       expect(document.activeElement).not.toBe(input);
     });
 
     test('value "true"', () => {
-      const { container } = render(<TextInput autoFocus />);
+      const { container } = renderRootView(<TextInput autoFocus />);
       const input = findInput(container);
       expect(document.activeElement).toBe(input);
     });
@@ -110,14 +112,16 @@ describe('components/TextInput', () => {
     const defaultValue = 'defaultValue';
 
     testIfDocumentIsFocused('value "false"', () => {
-      const { container } = render(<TextInput defaultValue={defaultValue} />);
+      const { container } = renderRootView(
+        <TextInput defaultValue={defaultValue} />
+      );
       const input = findInput(container);
       input.focus();
       expect(input.node.value).toEqual(defaultValue);
     });
 
     testIfDocumentIsFocused('value "true"', () => {
-      const { container } = render(
+      const { container } = renderRootView(
         <TextInput clearTextOnFocus defaultValue={defaultValue} />
       );
       const input = findInput(container);
@@ -128,20 +132,22 @@ describe('components/TextInput', () => {
 
   test('prop "defaultValue"', () => {
     const defaultValue = 'defaultValue';
-    const { container } = render(<TextInput defaultValue={defaultValue} />);
+    const { container } = renderRootView(
+      <TextInput defaultValue={defaultValue} />
+    );
     const input = findInput(container);
     expect(input.value).toEqual(defaultValue);
   });
 
   describe('prop "disabled"', () => {
     test('value "false"', () => {
-      const { container } = render(<TextInput />);
+      const { container } = renderRootView(<TextInput />);
       const input = findInput(container);
       expect(input.disabled).toEqual(false);
     });
 
     test('value "true"', () => {
-      const { container } = render(<TextInput disabled={true} />);
+      const { container } = renderRootView(<TextInput disabled={true} />);
       const input = findInput(container);
       expect(input.disabled).toEqual(true);
     });
@@ -149,13 +155,13 @@ describe('components/TextInput', () => {
 
   describe('prop "editable"', () => {
     test('value "true"', () => {
-      const { container } = render(<TextInput />);
+      const { container } = renderRootView(<TextInput />);
       const input = findInput(container);
       expect(input.readOnly).toEqual(false);
     });
 
     test('value "false"', () => {
-      const { container } = render(<TextInput editable={false} />);
+      const { container } = renderRootView(<TextInput editable={false} />);
       const input = findInput(container);
       expect(input.readOnly).toEqual(true);
     });
@@ -163,67 +169,79 @@ describe('components/TextInput', () => {
 
   describe('prop "keyboardType"', () => {
     test('default value', () => {
-      const { container } = render(<TextInput keyboardType="default" />);
+      const { container } = renderRootView(
+        <TextInput keyboardType="default" />
+      );
       const input = findInput(container);
       expect(input.type).toEqual('text');
     });
 
     test('value "email-address"', () => {
-      const { container } = render(<TextInput keyboardType="email-address" />);
+      const { container } = renderRootView(
+        <TextInput keyboardType="email-address" />
+      );
       const input = findInput(container);
       expect(input.type).toEqual('email');
     });
 
     test('value "decimal-pad"', () => {
-      const { container } = render(<TextInput keyboardType="decimal-pad" />);
+      const { container } = renderRootView(
+        <TextInput keyboardType="decimal-pad" />
+      );
       const input = findInput(container);
       expect(input.inputMode).toEqual('decimal');
     });
 
     test('value "number-pad"', () => {
-      const { container } = render(<TextInput keyboardType="number-pad" />);
+      const { container } = renderRootView(
+        <TextInput keyboardType="number-pad" />
+      );
       const input = findInput(container);
       expect(input.inputMode).toEqual('numeric');
     });
 
     test('value "numeric"', () => {
-      const { container } = render(<TextInput keyboardType="numeric" />);
+      const { container } = renderRootView(
+        <TextInput keyboardType="numeric" />
+      );
       const input = findInput(container);
       expect(input.inputMode).toEqual('numeric');
     });
 
     test('value "phone-pad"', () => {
-      const { container } = render(<TextInput keyboardType="phone-pad" />);
+      const { container } = renderRootView(
+        <TextInput keyboardType="phone-pad" />
+      );
       const input = findInput(container);
       expect(input.type).toEqual('tel');
     });
 
     test('value "url"', () => {
-      const { container } = render(<TextInput keyboardType="url" />);
+      const { container } = renderRootView(<TextInput keyboardType="url" />);
       const input = findInput(container);
       expect(input.type).toEqual('url');
     });
   });
 
   test('prop "maxLength"', () => {
-    let { container } = render(<TextInput />);
+    let { container } = renderRootView(<TextInput />);
     let input = findInput(container);
     expect(input.getAttribute('maxLength')).toEqual(null);
 
-    ({ container } = render(<TextInput maxLength={10} />));
+    ({ container } = renderRootView(<TextInput maxLength={10} />));
     input = findInput(container);
     expect(input.getAttribute('maxLength')).toEqual('10');
   });
 
   describe('prop "multiline"', () => {
     test('value "false"', () => {
-      const { container } = render(<TextInput />);
+      const { container } = renderRootView(<TextInput />);
       const input = findInput(container);
       expect(input).toBeDefined();
     });
 
     test('value "true"', () => {
-      const { container } = render(<TextInput multiline />);
+      const { container } = renderRootView(<TextInput multiline />);
       const textarea = findTextArea(container);
       expect(textarea).toBeDefined();
     });
@@ -231,7 +249,7 @@ describe('components/TextInput', () => {
 
   describe('prop "numberOfLines"', () => {
     test('without "multiline"', () => {
-      const { container } = render(<TextInput numberOfLines={2} />);
+      const { container } = renderRootView(<TextInput numberOfLines={2} />);
       const input = findInput(container);
       const textarea = findTextArea(container);
       expect(input).toBeDefined();
@@ -239,7 +257,9 @@ describe('components/TextInput', () => {
     });
 
     test('with "multiline"', () => {
-      const { container } = render(<TextInput multiline numberOfLines={3} />);
+      const { container } = renderRootView(
+        <TextInput multiline numberOfLines={3} />
+      );
       const textarea = findTextArea(container);
       expect(textarea.getAttribute('rows')).toEqual('3');
     });
@@ -249,7 +269,7 @@ describe('components/TextInput', () => {
     const onBlur = jest.fn();
     const ref = React.createRef();
     act(() => {
-      render(<TextInput onBlur={onBlur} ref={ref} />);
+      renderRootView(<TextInput onBlur={onBlur} ref={ref} />);
     });
     const target = createEventTarget(ref.current);
     const body = createEventTarget(document.body);
@@ -263,7 +283,7 @@ describe('components/TextInput', () => {
 
   test.skip('prop "onChange"', () => {
     const onChange = jest.fn();
-    const { container } = render(<TextInput onChange={onChange} />);
+    const { container } = renderRootView(<TextInput onChange={onChange} />);
     const input = findInput(container);
     // This doesn't cause ReactDOM to trigger 'change' event... ¯\_(ツ)_/¯
     input.dispatchEvent(new window.Event('change', { bubbles: true }));
@@ -272,7 +292,9 @@ describe('components/TextInput', () => {
 
   test.skip('prop "onChangeText"', () => {
     const onChangeText = jest.fn();
-    const { container } = render(<TextInput onChangeText={onChangeText} />);
+    const { container } = renderRootView(
+      <TextInput onChangeText={onChangeText} />
+    );
     const input = findInput(container);
     // This doesn't cause ReactDOM to trigger 'change' event... ¯\_(ツ)_/¯
     input.dispatchEvent(keydown({ key: 'a' }));
@@ -285,7 +307,7 @@ describe('components/TextInput', () => {
     const onFocus = jest.fn();
     const ref = React.createRef();
     act(() => {
-      render(<TextInput onFocus={onFocus} ref={ref} />);
+      renderRootView(<TextInput onFocus={onFocus} ref={ref} />);
     });
     const target = createEventTarget(ref.current);
     act(() => {
@@ -301,7 +323,9 @@ describe('components/TextInput', () => {
       const onKeyPress = jest.fn((e) => {
         e.persist();
       });
-      const { container } = render(<TextInput onKeyPress={onKeyPress} />);
+      const { container } = renderRootView(
+        <TextInput onKeyPress={onKeyPress} />
+      );
       const input = findInput(container);
       input.dispatchEvent(keydown({ key: 'ArrowLeft' }));
       expect(onKeyPress).toHaveBeenCalledTimes(1);
@@ -323,7 +347,9 @@ describe('components/TextInput', () => {
       const onKeyPress = jest.fn((e) => {
         e.persist();
       });
-      const { container } = render(<TextInput onKeyPress={onKeyPress} />);
+      const { container } = renderRootView(
+        <TextInput onKeyPress={onKeyPress} />
+      );
       const input = findInput(container);
       input.dispatchEvent(keydown({ key: 'Backspace' }));
       expect(onKeyPress).toHaveBeenCalledTimes(1);
@@ -345,7 +371,9 @@ describe('components/TextInput', () => {
       const onKeyPress = jest.fn((e) => {
         e.persist();
       });
-      const { container } = render(<TextInput onKeyPress={onKeyPress} />);
+      const { container } = renderRootView(
+        <TextInput onKeyPress={onKeyPress} />
+      );
       const input = findInput(container);
       input.dispatchEvent(keydown({ key: 'Enter' }));
       expect(onKeyPress).toHaveBeenCalledTimes(1);
@@ -367,7 +395,9 @@ describe('components/TextInput', () => {
       const onKeyPress = jest.fn((e) => {
         e.persist();
       });
-      const { container } = render(<TextInput onKeyPress={onKeyPress} />);
+      const { container } = renderRootView(
+        <TextInput onKeyPress={onKeyPress} />
+      );
       const input = findInput(container);
       input.dispatchEvent(keydown({ key: 'Escape' }));
       expect(onKeyPress).toHaveBeenCalledTimes(1);
@@ -389,7 +419,9 @@ describe('components/TextInput', () => {
       const onKeyPress = jest.fn((e) => {
         e.persist();
       });
-      const { container } = render(<TextInput onKeyPress={onKeyPress} />);
+      const { container } = renderRootView(
+        <TextInput onKeyPress={onKeyPress} />
+      );
       const input = findInput(container);
       input.dispatchEvent(keydown({ key: ' ' }));
       expect(onKeyPress).toHaveBeenCalledTimes(1);
@@ -411,7 +443,9 @@ describe('components/TextInput', () => {
       const onKeyPress = jest.fn((e) => {
         e.persist();
       });
-      const { container } = render(<TextInput onKeyPress={onKeyPress} />);
+      const { container } = renderRootView(
+        <TextInput onKeyPress={onKeyPress} />
+      );
       const input = findInput(container);
       input.dispatchEvent(keydown({ key: 'Tab' }));
       expect(onKeyPress).toHaveBeenCalledTimes(1);
@@ -433,7 +467,9 @@ describe('components/TextInput', () => {
       const onKeyPress = jest.fn((e) => {
         e.persist();
       });
-      const { container } = render(<TextInput onKeyPress={onKeyPress} />);
+      const { container } = renderRootView(
+        <TextInput onKeyPress={onKeyPress} />
+      );
       const input = findInput(container);
       input.dispatchEvent(keydown({ key: 'a' }));
       expect(onKeyPress).toHaveBeenCalledTimes(1);
@@ -455,7 +491,9 @@ describe('components/TextInput', () => {
       const onKeyPress = jest.fn((e) => {
         e.persist();
       });
-      const { container } = render(<TextInput onKeyPress={onKeyPress} />);
+      const { container } = renderRootView(
+        <TextInput onKeyPress={onKeyPress} />
+      );
       const input = findInput(container);
       input.dispatchEvent(
         keydown({
@@ -485,7 +523,9 @@ describe('components/TextInput', () => {
       const onKeyPress = jest.fn((e) => {
         e.persist();
       });
-      const { container } = render(<TextInput onKeyPress={onKeyPress} />);
+      const { container } = renderRootView(
+        <TextInput onKeyPress={onKeyPress} />
+      );
       const input = findInput(container);
       input.dispatchEvent(
         keydown({
@@ -499,7 +539,7 @@ describe('components/TextInput', () => {
 
   describe('prop "onSelectionChange"', () => {
     test('is called on select', () => {
-      const { container } = render(
+      const { container } = renderRootView(
         <TextInput defaultValue="12345" onSelectionChange={onSelectionChange} />
       );
       const input = findInput(container);
@@ -514,7 +554,7 @@ describe('components/TextInput', () => {
 
     test.skip('is called on change', () => {
       const onSelectionChange = jest.fn();
-      const { container } = render(
+      const { container } = renderRootView(
         <TextInput onSelectionChange={onSelectionChange} />
       );
       const input = findInput(container);
@@ -526,7 +566,7 @@ describe('components/TextInput', () => {
 
   describe('prop "onSubmitEditing"', () => {
     test('single-line input', (done) => {
-      const { container } = render(
+      const { container } = renderRootView(
         <TextInput defaultValue="12345" onSubmitEditing={onSubmitEditing} />
       );
       const input = findInput(container);
@@ -540,7 +580,7 @@ describe('components/TextInput', () => {
 
     test('single-line input while composing', () => {
       const onSubmitEditing = jest.fn();
-      const { container } = render(
+      const { container } = renderRootView(
         <TextInput defaultValue="12345" onSubmitEditing={onSubmitEditing} />
       );
       const input = findInput(container);
@@ -555,7 +595,7 @@ describe('components/TextInput', () => {
 
     test('multi-line input', () => {
       const onSubmitEditing = jest.fn();
-      const { container } = render(
+      const { container } = renderRootView(
         <TextInput
           defaultValue="12345"
           multiline
@@ -571,7 +611,7 @@ describe('components/TextInput', () => {
       const onSubmitEditing = jest.fn();
       const preventDefault = jest.fn();
 
-      const { container } = render(
+      const { container } = renderRootView(
         <TextInput
           blurOnSubmit
           defaultValue="12345"
@@ -597,24 +637,26 @@ describe('components/TextInput', () => {
 
   test('prop "returnKeyType"', () => {
     const returnKeyType = 'previous';
-    const { container } = render(<TextInput returnKeyType={returnKeyType} />);
+    const { container } = renderRootView(
+      <TextInput returnKeyType={returnKeyType} />
+    );
     const input = findInput(container);
     expect(input.getAttribute('enterkeyhint')).toEqual(returnKeyType);
   });
 
   test('prop "secureTextEntry"', () => {
-    let { container } = render(<TextInput secureTextEntry />);
+    let { container } = renderRootView(<TextInput secureTextEntry />);
     const input = findInput(container);
     expect(input.getAttribute('type')).toEqual('password');
     // ignored for multiline
-    ({ container } = render(<TextInput multiline secureTextEntry />));
+    ({ container } = renderRootView(<TextInput multiline secureTextEntry />));
     const textarea = findTextArea(container);
     expect(textarea.getAttribute('type')).toEqual(null);
   });
 
   describe('prop "selectTextOnFocus"', () => {
     testIfDocumentIsFocused('value "false"', () => {
-      const { container } = render(<TextInput defaultValue={'text'} />);
+      const { container } = renderRootView(<TextInput defaultValue={'text'} />);
       const input = findInput(container);
       input.focus();
       expect(input.selectionEnd).toEqual(4);
@@ -632,7 +674,7 @@ describe('components/TextInput', () => {
   describe('prop "selection"', () => {
     test('set cursor location', () => {
       const cursorLocation = { start: 3, end: 3 };
-      const { container: defaultContainer } = render(
+      const { container: defaultContainer } = renderRootView(
         <TextInput defaultValue="12345" />
       );
       const inputDefaultSelection = findInput(defaultContainer);
@@ -640,7 +682,7 @@ describe('components/TextInput', () => {
       expect(inputDefaultSelection.selectionStart).toEqual(5);
       expect(inputDefaultSelection.selectionEnd).toEqual(5);
 
-      const { container: customContainer } = render(
+      const { container: customContainer } = renderRootView(
         <TextInput defaultValue="12345" selection={cursorLocation} />
       );
       const inputCustomSelection = findInput(customContainer);
@@ -652,19 +694,19 @@ describe('components/TextInput', () => {
 
   describe('prop "spellCheck"', () => {
     test('default value', () => {
-      const { container } = render(<TextInput />);
+      const { container } = renderRootView(<TextInput />);
       const input = findInput(container);
       expect(input.getAttribute('spellCheck')).toEqual('true');
     });
 
     test('inherit from "autoCorrect"', () => {
-      const { container } = render(<TextInput autoCorrect={false} />);
+      const { container } = renderRootView(<TextInput autoCorrect={false} />);
       const input = findInput(container);
       expect(input.getAttribute('spellCheck')).toEqual('false');
     });
 
     test('value "false"', () => {
-      const { container } = render(<TextInput spellCheck={false} />);
+      const { container } = renderRootView(<TextInput spellCheck={false} />);
       const input = findInput(container);
       expect(input.getAttribute('spellCheck')).toEqual('false');
     });
@@ -672,7 +714,7 @@ describe('components/TextInput', () => {
 
   test('prop "value"', () => {
     const value = 'value';
-    const { container } = render(<TextInput value={value} />);
+    const { container } = renderRootView(<TextInput value={value} />);
     const input = findInput(container);
     expect(input.value).toEqual(value);
   });
@@ -680,13 +722,13 @@ describe('components/TextInput', () => {
   describe('imperative methods', () => {
     test('node.clear()', () => {
       const ref = React.createRef();
-      render(<TextInput ref={ref} />);
+      renderRootView(<TextInput ref={ref} />);
       expect(typeof ref.current.clear).toBe('function');
     });
 
     test('node.isFocused()', () => {
       const ref = React.createRef();
-      render(<TextInput ref={ref} />);
+      renderRootView(<TextInput ref={ref} />);
       expect(typeof ref.current.isFocused).toBe('function');
     });
   });

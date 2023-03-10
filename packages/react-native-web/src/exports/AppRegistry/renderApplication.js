@@ -14,6 +14,7 @@ import AppContainer from './AppContainer';
 import invariant from 'fbjs/lib/invariant';
 import render, { hydrate } from '../render';
 import StyleSheet from '../StyleSheet';
+import ReactRootView from '../AppRegistry/ReactRootView';
 import React from 'react';
 
 export default function renderApplication<Props: Object>(
@@ -32,9 +33,12 @@ export default function renderApplication<Props: Object>(
   invariant(rootTag, 'Expect to have a valid rootTag, instead got ', rootTag);
 
   renderFn(
-    <AppContainer WrapperComponent={WrapperComponent} rootTag={rootTag}>
-      <RootComponent {...initialProps} />
-    </AppContainer>,
+    <ReactRootView rootTag={rootTag}>
+      <AppContainer WrapperComponent={WrapperComponent} rootTag={rootTag}>
+        <RootComponent {...initialProps} />
+      </AppContainer>
+      ,
+    </ReactRootView>,
     rootTag,
     callback
   );
@@ -45,10 +49,13 @@ export function getApplication(
   initialProps: Object,
   WrapperComponent?: ?ComponentType<*>
 ): {| element: Node, getStyleElement: (Object) => Node |} {
+  const styleSheet = new StyleSheet();
   const element = (
-    <AppContainer WrapperComponent={WrapperComponent} rootTag={{}}>
-      <RootComponent {...initialProps} />
-    </AppContainer>
+    <ReactRootView _styleSheet={styleSheet} rootTag={{}}>
+      <AppContainer WrapperComponent={WrapperComponent}>
+        <RootComponent {...initialProps} />
+      </AppContainer>
+    </ReactRootView>
   );
   // Don't escape CSS text
   const getStyleElement = (props) => {

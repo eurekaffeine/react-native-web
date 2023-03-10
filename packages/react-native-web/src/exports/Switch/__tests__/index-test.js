@@ -6,7 +6,7 @@
  */
 
 import React from 'react';
-import { render } from '@testing-library/react';
+import renderRootView from '../../../exports/AppRegistry/renderRootView';
 import Switch from '..';
 
 function findCheckbox(container) {
@@ -23,51 +23,53 @@ function findSwitchThumb(container) {
 
 describe('components/Switch', () => {
   test('accessibilityLabel is applied to native checkbox', () => {
-    const { container } = render(<Switch accessibilityLabel="switch" />);
+    const { container } = renderRootView(
+      <Switch accessibilityLabel="switch" />
+    );
     expect(findCheckbox(container).getAttribute('aria-label')).toBe('switch');
   });
 
   describe('disabled', () => {
     test('when "false" a default checkbox is rendered', () => {
-      const { container } = render(<Switch />);
+      const { container } = renderRootView(<Switch />);
       expect(findCheckbox(container).disabled).toBe(false);
     });
 
     test('when "true" a disabled checkbox is rendered', () => {
-      const { container } = render(<Switch disabled />);
+      const { container } = renderRootView(<Switch disabled />);
       expect(findCheckbox(container).disabled).toBe(true);
     });
 
     test('when "true" and value="true", a disabled checkbox is rendered with provided activeTrackColor', () => {
-      const { container } = render(
+      const { container } = renderRootView(
         <Switch activeTrackColor="#E0245E" disabled value={true} />
       );
       expect(findSwitchTrack(container)).toMatchSnapshot();
     });
 
     test('when "true" and value="true", a disabled checkbox is rendered with provided activeThumbColor', () => {
-      const { container } = render(
+      const { container } = renderRootView(
         <Switch activeThumbColor="#fff" disabled value={true} />
       );
       expect(findSwitchThumb(container)).toMatchSnapshot();
     });
 
     test('when "true" and value="false", a disabled checkbox is rendered with provided trackColor', () => {
-      const { container } = render(
+      const { container } = renderRootView(
         <Switch disabled trackColor="#E0245E" value={false} />
       );
       expect(findSwitchTrack(container)).toMatchSnapshot();
     });
 
     test('when "true" and value="false", a disabled checkbox is rendered with provided thumbColor', () => {
-      const { container } = render(
+      const { container } = renderRootView(
         <Switch disabled thumbColor="#fff" value={false} />
       );
       expect(findSwitchThumb(container)).toMatchSnapshot();
     });
 
     test('when "true" and value="true", a disabled checkbox is rendered with provided true value of trackColor', () => {
-      const { container } = render(
+      const { container } = renderRootView(
         <Switch
           disabled={true}
           trackColor={{ true: '#E0245E', false: '#1DA1F2' }}
@@ -78,7 +80,7 @@ describe('components/Switch', () => {
     });
 
     test('when "true" and value="false", a disabled checkbox is rendered with provided false value of trackColor', () => {
-      const { container } = render(
+      const { container } = renderRootView(
         <Switch
           disabled={true}
           trackColor={{ true: '#E0245E', false: '#1DA1F2' }}
@@ -92,7 +94,7 @@ describe('components/Switch', () => {
   describe('onValueChange', () => {
     test('when value is "false" it receives "true"', () => {
       const onValueChange = jest.fn();
-      const { container } = render(
+      const { container } = renderRootView(
         <Switch onValueChange={onValueChange} value={false} />
       );
       const checkbox = findCheckbox(container);
@@ -102,7 +104,7 @@ describe('components/Switch', () => {
 
     test('when value is "true" it receives "false"', () => {
       const onValueChange = jest.fn();
-      const { container } = render(
+      const { container } = renderRootView(
         <Switch onValueChange={onValueChange} value />
       );
       const checkbox = findCheckbox(container);
@@ -113,12 +115,12 @@ describe('components/Switch', () => {
 
   describe('value', () => {
     test('when "false" an unchecked checkbox is rendered', () => {
-      const { container } = render(<Switch value={false} />);
+      const { container } = renderRootView(<Switch value={false} />);
       expect(findCheckbox(container).checked).toBe(false);
     });
 
     test('when "true" a checked checkbox is rendered', () => {
-      const { container } = render(<Switch value />);
+      const { container } = renderRootView(<Switch value />);
       expect(findCheckbox(container).checked).toBe(true);
     });
   });

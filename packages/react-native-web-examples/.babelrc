@@ -1,7 +1,8 @@
 {
   "presets": [
     "next/babel",
-    "@babel/preset-flow"
+    "@babel/preset-flow",
+    ["@babel/preset-react", {"runtime": "automatic"}]
   ],
   "plugins": [
     [ "react-native-web", { "commonjs": true } ]

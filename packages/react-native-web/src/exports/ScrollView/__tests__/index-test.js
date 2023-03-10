@@ -3,19 +3,19 @@ import ScrollView from '../';
 import { act } from 'react-dom/test-utils';
 import { createEventTarget } from 'dom-event-testing-library';
 import { findDOMNode } from 'react-dom';
-import { render } from '@testing-library/react';
+import renderRootView from '../../../exports/AppRegistry/renderRootView';
 
 describe('components/ScrollView', () => {
   describe('prop "centerContent"', () => {
     test('without', () => {
-      const { container } = render(
+      const { container } = renderRootView(
         <ScrollView style={{ backgroundColor: 'blue' }} />
       );
       expect(container.firstChild).toMatchSnapshot();
     });
 
     test('with', () => {
-      const { container } = render(
+      const { container } = renderRootView(
         <ScrollView centerContent style={{ backgroundColor: 'blue' }} />
       );
       expect(container.firstChild).toMatchSnapshot();
@@ -27,7 +27,7 @@ describe('components/ScrollView', () => {
       const onScroll = jest.fn();
       const ref = React.createRef();
       act(() => {
-        render(
+        renderRootView(
           <ScrollView onScroll={onScroll} ref={ref} scrollEventThrottle={16} />
         );
       });
@@ -43,7 +43,7 @@ describe('components/ScrollView', () => {
       const onScroll = jest.fn();
       const ref = React.createRef();
       act(() => {
-        render(
+        renderRootView(
           <ScrollView onScroll={onScroll} scrollEventThrottle={16}>
             <div ref={ref} />
           </ScrollView>
@@ -60,7 +60,7 @@ describe('components/ScrollView', () => {
   describe('prop "ref"', () => {
     test('value is set', () => {
       const ref = jest.fn();
-      render(<ScrollView ref={ref} />);
+      renderRootView(<ScrollView ref={ref} />);
       expect(ref).toBeCalled();
     });
 
@@ -68,7 +68,7 @@ describe('components/ScrollView', () => {
       const ref = jest.fn();
       let rerender;
       act(() => {
-        ({ rerender } = render(
+        ({ rerender } = renderRootView(
           <ScrollView nativeID="123" ref={ref} style={{ borderWidth: 5 }} />
         ));
       });
@@ -84,7 +84,7 @@ describe('components/ScrollView', () => {
     test('node has imperative methods', () => {
       const ref = React.createRef();
       act(() => {
-        render(<ScrollView ref={ref} />);
+        renderRootView(<ScrollView ref={ref} />);
       });
       const node = ref.current;
 
@@ -113,14 +113,14 @@ describe('components/ScrollView', () => {
 
   describe('prop "refreshControl"', () => {
     test('without', () => {
-      const { container } = render(
+      const { container } = renderRootView(
         <ScrollView style={{ backgroundColor: 'red' }} />
       );
       expect(container.firstChild).toMatchSnapshot();
     });
 
     test('with', () => {
-      const { container } = render(
+      const { container } = renderRootView(
         <ScrollView
           refreshControl={<div id="refresh-control" />}
           style={{ backgroundColor: 'red' }}

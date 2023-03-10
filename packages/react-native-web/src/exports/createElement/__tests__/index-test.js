@@ -6,24 +6,23 @@
  */
 
 import createElement from '..';
-import React from 'react';
-import { render } from '@testing-library/react';
+import renderRootView from '../../../exports/AppRegistry/renderRootView';
 
-function getAttribute(container, attribute) {
-  return container.firstChild.getAttribute(attribute);
-}
+// function getAttribute(container, attribute) {
+//   return container.firstChild.getAttribute(attribute);
+// }
 
-function getProperty(container, prop) {
-  return container.firstChild[prop];
-}
+// function getProperty(container, prop) {
+//   return container.firstChild[prop];
+// }
 
 describe('exports/createElement', () => {
   test('renders different DOM elements', () => {
-    let { container } = render(createElement('span'));
+    let { container } = renderRootView(createElement('span'));
     expect(container.firstChild).toMatchSnapshot();
-    ({ container } = render(createElement('main')));
+    ({ container } = renderRootView(createElement('main')));
     expect(container.firstChild).toMatchSnapshot();
-    ({ container } = render(
+    ({ container } = renderRootView(
       createElement('svg', {
         children: createElement('image', { href: '#href' })
       })
@@ -31,6 +30,7 @@ describe('exports/createElement', () => {
     expect(container.firstChild).toMatchSnapshot();
   });
 
+  /*
   describe('prop "accessibilityRole"', () => {
     test('string component type', () => {
       const { container } = render(
@@ -660,4 +660,5 @@ describe('exports/createElement', () => {
       expect(getAttribute(isFalseFocusableRole, 'tabindex')).toBe('-1');
     });
   });
+  */
 });

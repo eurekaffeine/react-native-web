@@ -14,6 +14,7 @@ import * as React from 'react';
 import View from '../View';
 import StyleSheet from '../StyleSheet';
 import canUseDOM from '../../modules/canUseDom';
+import RootContext from '../AppRegistry/RootContext';
 
 export type ModalContentProps = {
   ...ViewProps,
@@ -28,9 +29,11 @@ const ModalContent: React.AbstractComponent<
   React.ElementRef<typeof View>
 > = React.forwardRef((props, forwardedRef) => {
   const { active, children, onRequestClose, transparent, ...rest } = props;
+  const rootContext = React.useContext(RootContext);
 
   React.useEffect(() => {
     if (canUseDOM) {
+      const document = rootContext.rootTag?.ownerDocument ?? window.document;
       const closeOnEscape = (e: KeyboardEvent) => {
         if (active && e.key === 'Escape') {
           e.stopPropagation();
@@ -42,7 +45,7 @@ const ModalContent: React.AbstractComponent<
       document.addEventListener('keyup', closeOnEscape, false);
       return () => document.removeEventListener('keyup', closeOnEscape, false);
     }
-  }, [active, onRequestClose]);
+  }, [active, onRequestClose, rootContext.rootTag]);
 
   const style = React.useMemo(() => {
     return [

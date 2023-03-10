@@ -9,12 +9,12 @@ import ActivityIndicator from '..';
 import React from 'react';
 import { act } from 'react-dom/test-utils';
 import { createEventTarget } from 'dom-event-testing-library';
-import { render } from '@testing-library/react';
+import renderRootView from '../../../exports/AppRegistry/renderRootView';
 
 describe('components/ActivityIndicator', () => {
   describe('prop "accessibilityLabel"', () => {
     test('value is set', () => {
-      const { container } = render(
+      const { container } = renderRootView(
         <ActivityIndicator accessibilityLabel="accessibility label" />
       );
       expect(container.firstChild).toMatchSnapshot();
@@ -23,7 +23,7 @@ describe('components/ActivityIndicator', () => {
 
   describe('prop "accessibilityLiveRegion"', () => {
     test('value is set', () => {
-      const { container } = render(
+      const { container } = renderRootView(
         <ActivityIndicator accessibilityLiveRegion="polite" />
       );
       expect(container.firstChild).toMatchSnapshot();
@@ -32,25 +32,29 @@ describe('components/ActivityIndicator', () => {
 
   describe('prop "animating"', () => {
     test('is "true"', () => {
-      const { container } = render(<ActivityIndicator animating={true} />);
+      const { container } = renderRootView(
+        <ActivityIndicator animating={true} />
+      );
       expect(container.firstChild).toMatchSnapshot();
     });
 
     test('is "false"', () => {
-      const { container } = render(<ActivityIndicator animating={false} />);
+      const { container } = renderRootView(
+        <ActivityIndicator animating={false} />
+      );
       expect(container.firstChild).toMatchSnapshot();
     });
   });
 
   test('prop "color"', () => {
-    const { container } = render(<ActivityIndicator color="red" />);
+    const { container } = renderRootView(<ActivityIndicator color="red" />);
     const svg = container.firstChild.querySelector('svg');
     expect(svg).toMatchSnapshot();
   });
 
   describe('prop "dataSet"', () => {
     test('value is set', () => {
-      const { container } = render(
+      const { container } = renderRootView(
         <ActivityIndicator dataSet={{ one: 'one', two: 'two' }} />
       );
       expect(container.firstChild).toMatchSnapshot();
@@ -59,14 +63,14 @@ describe('components/ActivityIndicator', () => {
 
   describe('prop "hidesWhenStopped"', () => {
     test('is "true"', () => {
-      const { container } = render(
+      const { container } = renderRootView(
         <ActivityIndicator animating={false} hidesWhenStopped={true} />
       );
       expect(container.firstChild).toMatchSnapshot();
     });
 
     test('is "false"', () => {
-      const { container } = render(
+      const { container } = renderRootView(
         <ActivityIndicator animating={false} hidesWhenStopped={false} />
       );
       expect(container.firstChild).toMatchSnapshot();
@@ -75,7 +79,9 @@ describe('components/ActivityIndicator', () => {
 
   describe('prop "nativeID"', () => {
     test('value is set', () => {
-      const { container } = render(<ActivityIndicator nativeID="123" />);
+      const { container } = renderRootView(
+        <ActivityIndicator nativeID="123" />
+      );
       expect(container.firstChild).toMatchSnapshot();
     });
   });
@@ -85,7 +91,7 @@ describe('components/ActivityIndicator', () => {
       const onBlur = jest.fn();
       const ref = React.createRef();
       act(() => {
-        render(<ActivityIndicator onBlur={onBlur} ref={ref} />);
+        renderRootView(<ActivityIndicator onBlur={onBlur} ref={ref} />);
       });
       const target = createEventTarget(ref.current);
       const body = createEventTarget(document.body);
@@ -102,7 +108,7 @@ describe('components/ActivityIndicator', () => {
       const onFocus = jest.fn();
       const ref = React.createRef();
       act(() => {
-        render(<ActivityIndicator onFocus={onFocus} ref={ref} />);
+        renderRootView(<ActivityIndicator onFocus={onFocus} ref={ref} />);
       });
       const target = createEventTarget(ref.current);
       act(() => {
@@ -115,26 +121,26 @@ describe('components/ActivityIndicator', () => {
   describe('prop "ref"', () => {
     test('value is set', () => {
       const ref = jest.fn();
-      render(<ActivityIndicator ref={ref} />);
+      renderRootView(<ActivityIndicator ref={ref} />);
       expect(ref).toBeCalled();
     });
   });
 
   describe('prop "size"', () => {
     test('is "large"', () => {
-      const { container } = render(<ActivityIndicator size="large" />);
+      const { container } = renderRootView(<ActivityIndicator size="large" />);
       expect(container.firstChild).toMatchSnapshot();
     });
 
     test('is a number', () => {
-      const { container } = render(<ActivityIndicator size={30} />);
+      const { container } = renderRootView(<ActivityIndicator size={30} />);
       expect(container.firstChild).toMatchSnapshot();
     });
   });
 
   describe('prop "style"', () => {
     test('value is set', () => {
-      const { container } = render(
+      const { container } = renderRootView(
         <ActivityIndicator style={{ borderWidth: 5 }} />
       );
       expect(container.firstChild).toMatchSnapshot();
@@ -143,7 +149,7 @@ describe('components/ActivityIndicator', () => {
 
   describe('prop "testID"', () => {
     test('value is set', () => {
-      const { container } = render(<ActivityIndicator testID="123" />);
+      const { container } = renderRootView(<ActivityIndicator testID="123" />);
       expect(container.firstChild).toMatchSnapshot();
     });
   });

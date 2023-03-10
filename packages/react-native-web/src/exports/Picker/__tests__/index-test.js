@@ -6,7 +6,7 @@
  */
 
 import React from 'react';
-import { render } from '@testing-library/react';
+import renderRootView from '../../../exports/AppRegistry/renderRootView';
 import Picker from '..';
 
 function findSelect(container) {
@@ -22,13 +22,13 @@ describe('components/Picker', () => {
           <Picker.Item label="label-2" value="value-2" />
         </Picker>
       );
-      const { container } = render(picker);
+      const { container } = renderRootView(picker);
       expect(container.firstChild.firstChild).toMatchSnapshot();
     });
 
     test('items', () => {
       const pickerItem = <Picker.Item label="label-1" value="value-1" />;
-      const { container } = render(pickerItem);
+      const { container } = renderRootView(pickerItem);
       expect(container.firstChild).toMatchSnapshot();
     });
   });
@@ -41,7 +41,7 @@ describe('components/Picker', () => {
           <Picker.Item label="label-2" value="value-2" />
         </Picker>
       );
-      const { container } = render(picker);
+      const { container } = renderRootView(picker);
       expect(findSelect(container).disabled).toBe(true);
     });
   });
@@ -55,7 +55,7 @@ describe('components/Picker', () => {
           <Picker.Item label="label-2" value="value-2" />
         </Picker>
       );
-      const { container } = render(picker);
+      const { container } = renderRootView(picker);
       const select = findSelect(container);
       // mock change event
       select.selectedIndex = '1';
@@ -74,7 +74,7 @@ describe('components/Picker', () => {
           <Picker.Item label="label-2" value="value-2" />
         </Picker>
       );
-      const { container } = render(picker);
+      const { container } = renderRootView(picker);
       expect(findSelect(container).value).toBe('value-2');
     });
 
@@ -85,7 +85,7 @@ describe('components/Picker', () => {
           <Picker.Item label="label-2" value={22} />
         </Picker>
       );
-      const { container } = render(picker);
+      const { container } = renderRootView(picker);
       expect(findSelect(container).value).toBe('22');
     });
   });

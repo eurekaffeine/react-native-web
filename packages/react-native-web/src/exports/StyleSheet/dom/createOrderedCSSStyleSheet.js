@@ -41,7 +41,7 @@ export default function createOrderedCSSStyleSheet(
   /**
    * Hydrate approximate record from any existing rules in the sheet.
    */
-  if (sheet != null) {
+  if (sheet != null && sheet.cssRules != null) {
     let group;
     slice.call(sheet.cssRules).forEach((cssRule, i) => {
       const cssText = cssRule.cssText;
@@ -65,10 +65,14 @@ export default function createOrderedCSSStyleSheet(
     const nextGroupIndex = groupIndex + 1;
     const nextGroup = orderedGroups[nextGroupIndex];
     // Insert rule before the next group, or at the end of the stylesheet
+    let length = sheet.cssRules?.length;
+    if (sheet.cssRules != null) {
+      length = sheet.cssRules.length;
+    }
     const position =
       nextGroup != null && groups[nextGroup].start != null
         ? groups[nextGroup].start
-        : sheet.cssRules.length;
+        : length;
     const isInserted = insertRuleAt(sheet, text, position);
 
     if (isInserted) {

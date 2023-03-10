@@ -13,7 +13,7 @@ import type {
 } from './ResponderTouchHistoryStore';
 import type { TouchEvent } from './ResponderEventTypes';
 
-import getBoundingClientRect from '../../modules/getBoundingClientRect';
+import type getBoundingClientRect from '../../modules/getBoundingClientRect';
 
 export type ResponderEvent = {|
   bubbles: boolean,

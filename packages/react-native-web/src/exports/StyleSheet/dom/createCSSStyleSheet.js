@@ -12,16 +12,22 @@ import canUseDOM from '../../../modules/canUseDom';
 export default function createCSSStyleSheet(
   id: string,
   rootNode?: Document | ShadowRoot,
-  textContent?: string
-): ?CSSStyleSheet {
+  textContent?: string,
+  rootTag?: HTMLElement
+) /*: ?CSSStyleSheet*/ {
   if (canUseDOM) {
-    const root = rootNode != null ? rootNode : document;
-    let element = root.getElementById(id);
+    const doc = rootTag?.ownerDocument || document;
+    const root = rootNode != null ? rootNode : doc;
+    let element = doc.getElementById(id);
     if (element == null) {
-      element = document.createElement('style');
+      element = doc.createElement('style');
       element.setAttribute('id', id);
+      const head = doc.head;
+      if (head) {
+        head.insertBefore(element, head.firstChild);
+      }
       if (typeof textContent === 'string') {
-        element.appendChild(document.createTextNode(textContent));
+        element.appendChild(doc.createTextNode(textContent));
       }
       if (root instanceof ShadowRoot) {
         root.insertBefore(element, root.firstChild);
@@ -33,8 +39,14 @@ export default function createCSSStyleSheet(
       }
     }
     // $FlowFixMe: HTMLElement is incorrectly typed
-    return element.sheet;
+    return element;
   } else {
     return null;
+  }
+}
+
+export function destroyStyleSheet(element: ?HTMLStyleElement) {
+  if (element) {
+    element.remove();
   }
 }
